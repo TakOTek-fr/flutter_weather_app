@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:connectivity/connectivity.dart';
 
 void main() => runApp(WeatherApp());
 
@@ -38,47 +40,35 @@ class WeatherApp extends StatelessWidget {
     margin: const EdgeInsets.only(top:16.0),
     padding: const EdgeInsets.only(top: 16.0),
     child: Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                child: Text(
-                  'New York',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 32,
+       mainAxisAlignment:  MainAxisAlignment.center,
+       children: [
+             Container(
+               child: Text('New York',
+               style: TextStyle(
+                   color: Colors.white,
+                   fontWeight: FontWeight.bold,
+                   fontSize: 32,
                   ),
                 ),
-              ),
-            ],
+              )],
           ),
-        ),
-      ],
-    ),
-  );
+        );
 
   Widget descSection = Container(
     padding: const EdgeInsets.only(top:8.0),
     child: Row(
-      children: [ Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment:  MainAxisAlignment.center,
           children: [Container(
-            child: Text(
-              'Ensoleillé',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 16,
-              )
-            ),
+                child: Text(
+                  'Ensoleillé',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16,
+                  )
+                ),
           )],
         ),
-      )],
-    )
   );
 
   Widget tempSection = Container(
@@ -103,6 +93,29 @@ class WeatherApp extends StatelessWidget {
         ],
       ),
     );
+}
+
+class NetworkCheck {
+  Future<bool> check() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      return true;
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      return true;
+    }
+    return false;
+  }
+
+  dynamic checkInternet(Function func) {
+    check().then((intenet) {
+      if (intenet != null && intenet) {
+        func(true);
+      }
+      else{
+        func(false);
+      }
+    });
+  }
 }
 
 
